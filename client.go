@@ -53,15 +53,15 @@ func NewNotificationClient(ctx context.Context, opts ...apic.ClientOption) (*Not
 
 // Close closes the connection to the API service. The user should invoke this when
 // the client is no longer required.
-func (c *NotificationClient) Close() error {
-	return c.clientConn.Close()
+func (nc *NotificationClient) Close() error {
+	return nc.clientConn.Close()
 }
 
 // setClientInfo sets the name and version of the application in
 // the `x-goog-api-client` header passed on each request. Intended for
 // use by Google-written clients.
-func (c *NotificationClient) setClientInfo(keyval ...string) {
+func (nc *NotificationClient) setClientInfo(keyval ...string) {
 	kv := append([]string{"gl-go", apic.VersionGo()}, keyval...)
 	kv = append(kv, "grpc", grpc.Version)
-	c.xMetadata = metadata.Pairs("x-ai-api-client", apic.XAntHeader(kv...))
+	nc.xMetadata = metadata.Pairs("x-ai-api-client", apic.XAntHeader(kv...))
 }
