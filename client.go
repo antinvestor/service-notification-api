@@ -65,3 +65,22 @@ func (nc *NotificationClient) setClientInfo(keyval ...string) {
 	kv = append(kv, "grpc", grpc.Version)
 	nc.xMetadata = metadata.Pairs("x-ai-api-client", apic.XAntHeader(kv...))
 }
+
+
+
+func (nc *NotificationClient) Send(ctx context.Context, profileId string, contactId string, language string,
+	template string, variables map[string]string)  (*StatusResponse, error) {
+
+	notificationService := NewNotificationServiceClient(nc.clientConn)
+
+	messageOut := MessageOut{
+		Autosend:         true,
+		MessageTemplete:  template,
+		Language:         language,
+		ProfileID:        profileId,
+		ContactID:        contactId,
+		MessageVariables: variables,
+	}
+
+	return notificationService.Out(ctx, &messageOut)
+}
