@@ -9,6 +9,8 @@ import (
 	"math"
 )
 
+const ctxKeyService = "notificationClientKey"
+
 func defaultNotificationClientOptions() []apic.ClientOption {
 	return []apic.ClientOption{
 		apic.WithEndpoint("notification.api.antinvestor.com:443"),
@@ -16,6 +18,20 @@ func defaultNotificationClientOptions() []apic.ClientOption {
 		apic.WithGRPCDialOption(grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(math.MaxInt32))),
 	}
 }
+
+func ToContext(ctx context.Context, client *NotificationClient) context.Context {
+	return context.WithValue(ctx, ctxKeyService, client)
+}
+
+func FromContext(ctx context.Context) *NotificationClient {
+	client, ok := ctx.Value(ctxKeyService).(*NotificationClient)
+	if !ok {
+		return nil
+	}
+
+	return client
+}
+
 
 // NotificationClient is a client for interacting with the notification service API.
 //
